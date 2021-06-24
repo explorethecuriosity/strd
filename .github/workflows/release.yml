@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  release:
+    name: Publish to NPM
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - run: |
+          npm set progress=false
+          npm set registry https://registry.npmjs.org/ && echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN_PUBLISH }}" > .npmrc
+          git config --global user.email "tiago@etc.digital"
+          git config --global user.name "Tiago Souza"
+
+      - run: npm install
+
+      - name: Release
+        uses: cycjimmy/semantic-release-action@v2
+        with:
+          extra_plugins: |
+            @semantic-release/commit-analyzer
+            @semantic-release/release-notes-generator
+            @semantic-release/changelog
+            @semantic-release/github
+            @semantic-release/git
+            @semantic-release/npm
+          branch: "main"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN_PUBLISH}}
+          NPM_TOKEN: ${{secrets.NPM_TOKEN_PUBLISH}}
+          GH_TOKEN: ${{secrets.GH_TOKEN}}
