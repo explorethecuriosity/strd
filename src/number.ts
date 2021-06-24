@@ -82,6 +82,14 @@ class NumberValidation {
     return this;
   }
 
+  test(fn: (value: any) => string) {
+    if (this.error) {
+      return this;
+    }
+    this.error = fn(this._value);
+    return this;
+  }
+
   validate() {
     // If has error, return the error
     if (this.error) {

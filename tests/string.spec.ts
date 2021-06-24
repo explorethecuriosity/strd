@@ -111,4 +111,27 @@ it("unit: string", () => {
       .max(4, "Type maximum 4 chars")
       .validate()
   ).toBe("");
+
+  expect(
+    string("2123")
+      .defaultMessage(invalidPhrase)
+      .test(
+        () =>
+          // make the logic
+          "test ok"
+      )
+      .validate()
+  ).toBe("test ok");
+
+  expect(
+    string("21")
+      .defaultMessage(invalidPhrase)
+      .min(3, "Type maximum 3 chars")
+      .test(
+        () =>
+          // make the logic
+          "test ok"
+      )
+      .validate()
+  ).toBe("Type maximum 3 chars");
 });
