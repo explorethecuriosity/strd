@@ -4,7 +4,7 @@ export type Error = { fail: boolean; errors: any };
 
 type Props = { [key in string]: (args: any) => string | null };
 
-export const Validation = (props: Props, data: any): Error => {
+export const validation = (props: Props, data: any): Error => {
   let fail = false;
   const errors: any = {};
   const setError = ({ message, key }: SetError): void => {
